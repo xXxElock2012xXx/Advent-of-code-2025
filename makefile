@@ -1,6 +1,7 @@
 .PHONY: clean flash
 
-CC:=avr-gcc
+CC:=avr-g++
+LD:=avr-ld
 TARGET_NAME := main
 OUTPUT_DIRECTORY := build
 SOURCE_DIRECTORY := src
@@ -28,7 +29,7 @@ $(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex: $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin
 
 #link the object files into the binary
 $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin: $(OBJECTS) $(CPP_OBJECTS)
-	$(CC) -o $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin $(OBJECTS_TO_LINK) -mmcu=$(TARGET_PLATFORM)
+	$(CC) -o $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin $(OBJECTS_TO_LINK) -mmcu=$(TARGET_PLATFORM) -Wl,-Map=$(OUTPUT_DIRECTORY)/$(TARGET_NAME).map
 
 #compile each .cpp file individually
 $(CPP_OBJECTS): $(INCLUDES) %.o :%.cpp 
