@@ -1,12 +1,12 @@
 .PHONY: clean flash
 
-CC:=avr-g++
+CC:=avr-gcc
 LD:=avr-ld
-TARGET_NAME := main
+TARGET_NAME := 1a
 OUTPUT_DIRECTORY := build
 SOURCE_DIRECTORY := src
-INCLUDE_DIRECTORY := include
-INCLUDE_DIRECTORY += include/arduino
+INCLUDE_DIRECTORY := ../include
+INCLUDE_DIRECTORY += ../include/arduino
 INCLUDE_FLAG := $(addprefix -I, $(INCLUDE_DIRECTORY))
 TARGET_PLATFORM := atmega2560
 
@@ -46,4 +46,4 @@ clean:
 
 flash:
 
-	sudo avrdude -v -D -p m2560 -c stk500v2 -P /dev/ttyACM0 -b 115200 -F -U flash:w:$(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex
+	avrdude -v -D -p m2560 -c stk500v2 -P /dev/ttyACM0 -b 115200 -F -U flash:w:$(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex
