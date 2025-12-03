@@ -31,6 +31,10 @@ Checks: >
   -clang-diagnostic-error,
   -cppcoreguidelines-avoid-c-arrays,
   -modernize-avoid-c-arrays,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -modernize-deprecated-headers,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-*,
 
 ExtraArgs:
   - "-std=c++23"
