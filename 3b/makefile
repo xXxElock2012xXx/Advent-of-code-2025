@@ -1,14 +1,12 @@
 .PHONY: clean flash
 
-CC:=../avr-gcc-15.2.0-x64-linux/bin/avr-gcc
-LD:=../avr-gcc-15.2.0-x64-linux/bin/avr-ld
-TARGET_NAME := 2a
+CC:=avr-gcc
+LD:=avr-ld
+TARGET_NAME := 3b
 OUTPUT_DIRECTORY := build
 SOURCE_DIRECTORY := src
-COMPILER_DIRECTORY := src
 INCLUDE_DIRECTORY := ../include
 INCLUDE_DIRECTORY += ../include/arduino
-INCLUDE_DIRECTORY += ../avr-gcc-15.2.0-x64-linux/avr/include
 INCLUDE_FLAG := $(addprefix -I, $(INCLUDE_DIRECTORY))
 TARGET_PLATFORM := atmega2560
 
@@ -17,14 +15,12 @@ CFLAGS:=
 SOURCES := $(shell find $(SOURCE_DIRECTORY) -name '*.cpp')
 C_SOURCES := $(shell find $(SOURCE_DIRECTORY) -name '*.c')
 ASM_OBJECTS := $(shell find $(SOURCE_DIRECTORY) -name '*.S')
-SHARED_OBJECTS := $(shell find $(COMPILER_DIRECTORY) -name '*.so')
 
 CPP_OBJECTS := $(SOURCES:%.cpp=%.o)
 OBJECTS := $(C_SOURCES:%.c=%.o)
 OBJECTS_TO_LINK := $(addprefix $(OUTPUT_DIRECTORY)/, $(OBJECTS))
 OBJECTS_TO_LINK += $(addprefix $(OUTPUT_DIRECTORY)/, $(CPP_OBJECTS))
 OBJECTS_TO_LINK += $(ASM_OBJECTS)
-OBJECTS_TO_LINK += $(SHARED_OBJECTS)
 
 #Transform the binary file into a intel hex file to be ready to flash
 $(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex: $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin

@@ -1,3 +1,5 @@
 Atmega2560 mcu datasheet         https://ww1.microchip.com/downloads/en/devicedoc/atmel-2549-8-bit-avr-microcontroller-atmega640-1280-1281-2560-2561_datasheet.pdf
 Arduino mega 2560 rev3 datasheet https://docs.arduino.cc/resources/datasheets/A000067-datasheet.pdf
 Make                             https://www.gnu.org/software/make/manual/make.html
+AVRASM                           https://ww1.microchip.com/downloads/en/DeviceDoc/40001917A.pdf
+AVR Instruction set              https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/ReferenceManuals/AVR-InstructionSet-Manual-DS40002198.pdf

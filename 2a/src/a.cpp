@@ -1,17 +1,16 @@
 #include "Arduino.h"
 #include "HardwareSerial.h"
-#include "avr/pgmspace.h"
-#include <avr/io.h>
 extern "C" {
-#include <stdint.h>
+#include "stdint.h"
 }
-#include <util/delay.h>
+#include "avr/io.h"
+#include "util/delay.h"
 
-const uint64_t kInputData[] PROGMEM = {
+const uint64_t kInputData[] = {
 #include "problem2.h"
 };
 
-constexpr int32_t kInputSize PROGMEM =
+constexpr int32_t kInputSize =
     sizeof(kInputData) / sizeof(kInputData[0]);
 
 namespace {
@@ -49,18 +48,25 @@ public:
   uint32_t bytes[2];
 };
 
-Uint64 ReadVal(const uint64_t *input_data, uint16_t index) {
+// uint64_t ReadVal(const uint64_t *input_data, uint16_t index) {
 
-  Uint64 retval;
-  const uint8_t *source = reinterpret_cast<const uint8_t *>(input_data) +
-                          (sizeof(input_data[0]) * index);
-  uint8_t *dest = reinterpret_cast<uint8_t *>(&retval);
+//   uint64_t retval;
+//   const uint8_t *source = reinterpret_cast<const uint8_t *>(input_data) +
+//                           (sizeof(input_data[0]) * index);
+//   uint8_t *dest = reinterpret_cast<uint8_t *>(&retval);
 
-  for (uint8_t i = 0; i < 8; i++) {
-    *(dest + i) = pgm_read_byte(source + i);
-  }
+//   for (uint8_t i = 0; i < 8; i++) {
+//     *(dest + i) = pgm_read_byte(source + i);
+//   }
 
-  return retval;
+//   return retval;
+// }
+
+uint64_t ReadVal(const uint64_t *input_data, uint32_t index) {
+  Serial.println(" ");
+  Serial.print(pgm_read_qword(input_data));
+  Serial.println(" ");
+  return pgm_read_qword(&input_data[index]);
 }
 
 uint8_t CountDigits(uint64_t n) {
@@ -98,26 +104,12 @@ uint8_t ProcessNumber(uint64_t n) {
 void setup() {
   Serial.begin(115200);
   Serial.println("2a");
+  Serial.print(kInputData[0]);
+  Serial.println(" ");
 
   uint64_t result = 0;
 
-  for (uint8_t i = 0; i < kInputSize - 1; i += 2) {
-    const Uint64 start = ReadVal(kInputData, i);
-    // const uint64_t end = ReadVal(kInputData, i + 1);
-
-    // for (uint64_t j = kInputData[i]; j <= kInputData[i + 1]; j++) {
-
-    Serial.print(i);
-    Serial.print(" ");
-    start.Print();
-    // if (ProcessNumber(j) != 0) {
-    //   result += j;
-    // }
-    //   break;
-    // }
-  }
-  // Serial.print(result);
-  // Serial.println();
+  // const uint64_t start = ReadVal(kInputData, 0);
 }
 
 void loop() { ; }
