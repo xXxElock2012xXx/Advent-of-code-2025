@@ -7,14 +7,14 @@ extern "C" {
 }
 #include <util/delay.h>
 
-// constexpr uint8_t kRowLength = 13;
+// constexpr uint8_t kRowLength = 12;
 // constexpr uint8_t kRowCount = 12;
 
-constexpr uint8_t kRowLength = 138;
+constexpr uint8_t kRowLength = 137;
 constexpr uint8_t kRowCount = 137;
 
 namespace {
-const char kInputData[kRowCount][kRowLength] PROGMEM = {
+const char kInputData[kRowCount][kRowLength + 1] PROGMEM = {
 #include "problem4.h"
 };
 
@@ -33,14 +33,14 @@ void setup() {
   uint16_t result = 0;
   uint32_t start = micros();
 
-  Bitset<(kRowCount * (kRowLength - 1) + 7) / 8> data;
-  Bitset<(kRowCount * (kRowLength - 1) + 7) / 8> mirror;
+  Bitset<(kRowCount * kRowLength + 7) / 8> data;
+  Bitset<(kRowCount * kRowLength + 7) / 8> mirror;
 
-  for (uint8_t i = 0; i < kRowLength - 1; i++) {
-    for (uint8_t j = 0; j < kRowLength - 1; j++) {
-      const uint8_t value =
-          static_cast<const uint8_t>(ReadVal(kInputData[i], j) == '@');
-      data.Set(value, (i * (kRowLength - 1)) + j);
+  for (uint8_t i = 0; i < kRowLength; i++) {
+    for (uint8_t j = 0; j < kRowLength; j++) {
+      if (ReadVal(kInputData[i], j) == '@') {
+        data.FillBit((i * kRowLength) + j);
+      }
     }
   }
 
@@ -54,17 +54,28 @@ void setup() {
   // Serial.println();
   uint8_t next = 1;
   while (next) {
-
     next = 0;
+
+    // uint8_t decompressed[3][kRowLength];
+
+    // for (uint8_t k = 0; k < 3; k++) {
+    //   for (uint8_t l = 0; l < kRowLength; l++) {
+    //     if (data.At((k * (kRowLength)) + l)) {
+    //       decompressed[k][l] = 1;
+    //     } else {
+    //       decompressed[k][l] = 0;
+    //     }
+    //   }
+    // }
+
     for (uint8_t i = 0; i < kRowLength - 2; i++) {
       for (uint8_t j = 0; j < kRowLength - 2; j++) {
-
-        if (data.At(((i + 1) * (kRowLength - 1)) + j + 1)) {
+        if (data.At(((i + 1) * kRowLength) + j + 1)) {
           uint8_t neighbour_count = 0;
 
           for (uint8_t x = 0; x < 3; x++) {
             for (uint8_t y = 0; y < 3; y++) {
-              if (data.At(((i + x) * (kRowLength - 1)) + j + y)) {
+              if (data.At(((i + x) * kRowLength) + j + y)) {
                 neighbour_count++;
               }
             }
@@ -72,21 +83,18 @@ void setup() {
 
           if (neighbour_count <= 4) {
             result++;
-            mirror.Set(1, ((i + 1) * (kRowLength - 1)) + j + 1);
+
+            mirror.ClearBit(((i + 1) * kRowLength) + j + 1);
+
             next = 1;
+          } else {
+            mirror.FillBit(((i + 1) * kRowLength) + j + 1);
           }
         }
       }
     }
 
-    for (uint8_t i = 0; i < kRowLength - 1; i++) {
-      for (uint8_t j = 0; j < kRowLength - 1; j++) {
-        if (mirror.At((i * (kRowLength - 1)) + j)){
-          data.Set(0, (i * (kRowLength - 1)) + j);
-        }
-      }
-    }
-    mirror.Flush();
+    data.Swap(mirror);
   }
 
   uint32_t end = micros() - start;

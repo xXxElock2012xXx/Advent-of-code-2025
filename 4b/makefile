@@ -2,7 +2,7 @@
 
 CC:=avr-gcc
 LD:=avr-ld
-TARGET_NAME := 4a
+TARGET_NAME := 4b
 OUTPUT_DIRECTORY := build
 SOURCE_DIRECTORY := src
 INCLUDE_DIRECTORY := ../include

@@ -7,7 +7,16 @@ template <uint16_t nb> class Bitset {
 public:
   Bitset() { Flush(); }
 
-  void Set(const uint8_t value, const uint16_t idx) {
+
+  void ClearBit(const uint16_t idx) {
+    memory_[idx / 8] &= ~static_cast<uint8_t>(1 << (idx % 8));
+  }
+
+  void FillBit(const uint16_t idx) {
+    memory_[idx / 8] |= static_cast<uint8_t>(1 << (idx % 8));
+  }
+
+  void SetBit(const uint8_t value, const uint16_t idx) {
     if (value == 1) {
       memory_[idx / 8] |= static_cast<uint8_t>(1 << (idx % 8));
     } else {
@@ -20,6 +29,10 @@ public:
   [[nodiscard]] bool At(const uint16_t idx) const {
     return static_cast<bool>(memory_[idx / 8] &
                              static_cast<uint8_t>(1 << (idx % 8)));
+  }
+
+  void Swap(const Bitset<nb> &other) {
+    memcpy(this->memory_, &other.memory_, nb);
   }
 
 private:
