@@ -69,8 +69,12 @@ void setup() {
     // }
 
     for (uint8_t i = 0; i < kRowLength - 2; i++) {
+      const uint16_t new_i = (static_cast<uint16_t>(i + 1)) * kRowLength;
+
       for (uint8_t j = 0; j < kRowLength - 2; j++) {
-        if (data.At(((i + 1) * kRowLength) + j + 1)) {
+        const uint16_t index = new_i + j + 1;
+
+        if (data.At(index)) {
           uint8_t neighbour_count = 0;
 
           for (uint8_t x = 0; x < 3; x++) {
@@ -83,12 +87,11 @@ void setup() {
 
           if (neighbour_count <= 4) {
             result++;
-
-            mirror.ClearBit(((i + 1) * kRowLength) + j + 1);
+            mirror.ClearBit(index);
 
             next = 1;
           } else {
-            mirror.FillBit(((i + 1) * kRowLength) + j + 1);
+            mirror.FillBit(index);
           }
         }
       }
