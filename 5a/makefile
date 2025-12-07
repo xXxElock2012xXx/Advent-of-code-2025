@@ -31,8 +31,9 @@ $(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex: $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin
 	avr-objcopy -O ihex -R .eeprom $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin $(OUTPUT_DIRECTORY)/$(TARGET_NAME).hex
 
 #link the object files into the binary
-$(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin: $(OBJECTS) $(CPP_OBJECTS)
-	$(CC) -o $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin $(OBJECTS_TO_LINK) -mmcu=$(TARGET_PLATFORM) -Wl,-Map=$(OUTPUT_DIRECTORY)/$(TARGET_NAME).map
+$(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin: $(OBJECTS_TO_LINK)
+	mkdir -p $(OUTPUT_DIRECTORY)
+	$(CC) -o $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin -Wl,-Map=$(OUTPUT_DIRECTORY)/$(TARGET_NAME).map -mmcu=$(TARGET_PLATFORM) $(OBJECTS_TO_LINK) 
 
 #compile each .cpp file individually
 $(CPP_OBJECTS): $(INCLUDES) %.o :%.cpp 
@@ -43,7 +44,7 @@ $(OBJECTS): $(INCLUDES) %.o :%.c
 	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(INCLUDE_FLAG) $(CFLAGS)
 
 clean:
-	-rm -rf build/
+	-rm -rf build/* ../common/arduino/*.o compile_commands.json
 
 flash:
 

@@ -44,7 +44,7 @@ $(OBJECTS): $(INCLUDES) %.o :%.c
 	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(INCLUDE_FLAG) $(CFLAGS)
 
 clean:
-	-rm -rf build/ ../*.o
+	-rm -rf build/* ../common/arduino/*.o compile_commands.json
 
 flash:
 
