@@ -7,50 +7,44 @@ extern "C" {
 #include "Uint64.h"
 #include <util/delay.h>
 
-// constexpr uint8_t kIdRangesSize = 2 * 4;
-// constexpr uint8_t kIdCount = 6;
-
-constexpr uint16_t kIdRangesSize = 2 * 200;
-constexpr uint16_t kIdCount = 1000;
+constexpr uint8_t kNumberCount = 3;
+constexpr uint8_t kCollumnCount = 4;
+constexpr uint8_t kOerationCount = kCollumnCount;
 
 namespace {
-const uint64_t kIdRanges[kIdRangesSize] PROGMEM = {
-#include "problem5-1.h"
+const uint64_t kIdRanges[kCollumnCount * kNumberCount] PROGMEM = {
+#include "problem6-example1.h"
 };
 
-const uint64_t kIds[kIdCount] PROGMEM = {
-#include "problem5-2.h"
+const uint64_t kIds[kOerationCount] PROGMEM = {
+#include "problem6-example2.h"
 };
+
+
+uint64_t ReadVal_main(const uint64_t *input_data, uint16_t index) {
+
+  uint64_t retval;
+  const uint8_t *source = reinterpret_cast<const uint8_t *>(input_data) +
+                          (sizeof(input_data[0]) * index);
+  uint8_t *dest = reinterpret_cast<uint8_t *>(&retval);
+
+  for (uint8_t i = 0; i < 8; i++) {
+    *(dest + i) = pgm_read_byte(source + i);
+  }
+
+  return retval;
+}
+
+
 
 } // namespace
 
 void setup() {
 
-  uint16_t result = 0;
-  Uint64 left;
-  Uint64 right;
+  Uint64 result;
 
-  Uint64 mirror;
-
-  for (uint16_t i = 0; i < kIdCount; i++) {
-
-    mirror.ReadUint64(kIds, i);
-
-    for (uint16_t j = 0; j < kIdRangesSize - 1; j += 2) {
-      // Serial.print(i);
-      // Serial.print(" ");
-      // Serial.println(j);
-
-      left.ReadUint64(kIdRanges, j);
-      right.ReadUint64(kIdRanges, j + 1);
-
-      if (left <= mirror && mirror <= right) {
-        result++;
-        break;
-      }
-    }
-    Serial.println(i);
-  }
-
-  Serial.println(result);
+  Serial.print("fuck main");
+  Serial.print("fuck main");
+  result.ReadUint64(&kIdRanges[0]);
+  result.Print();
 }

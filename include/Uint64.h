@@ -1,4 +1,7 @@
+#ifndef UINT64_H__
+#define UINT64_H__
 
+#include "ReadPgm.h"
 #include "arduino/HardwareSerial.h"
 #include "stdint.h"
 
@@ -69,9 +72,9 @@ public:
            (this->bytes[0] < other.bytes[0] &&
             this->bytes[1] == other.bytes[1]);
   }
-  
+
   bool operator<=(const Uint64 &other) {
-    return *this < other or *this==other;
+    return *this < other or *this == other;
   }
 
   bool operator==(const uint16_t &other) {
@@ -85,15 +88,9 @@ public:
 
   Uint64 &operator++() { return *this += 1; }
 
-  void ReadUint64(const uint64_t *input_data, uint16_t index) {
-
-    const uint8_t *source = reinterpret_cast<const uint8_t *>(input_data) +
-                            (sizeof(input_data[0]) * index);
-    uint8_t *dest = reinterpret_cast<uint8_t *>(&this->bytes);
-
-    for (uint8_t i = 0; i < 8; i++) {
-      *(dest + i) = pgm_read_byte(source + i);
-    }
+  void ReadUint64(const uint64_t *input_data) {
+    Serial.println ("Fuck uint64");
+    ReadVal(input_data, this->bytes);
   }
 
   void Print() {
@@ -109,3 +106,5 @@ public:
   }
   uint32_t bytes[2];
 };
+
+#endif // UINT64_H__

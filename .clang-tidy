@@ -36,6 +36,9 @@ Checks: >
   -cppcoreguidelines-pro-bounds-constant-array-index,
   -cppcoreguidelines-*,
   -modernize-loop-convert,
+  -misc-use-internal-linkage,
+  -readability-identifier-naming,
+  -modernize-redundant-void-arg,
 
 ExtraArgs:
   - "-std=c++23"

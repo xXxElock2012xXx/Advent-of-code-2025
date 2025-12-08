@@ -37,11 +37,11 @@ $(OUTPUT_DIRECTORY)/$(TARGET_NAME).bin: $(OBJECTS_TO_LINK)
 
 #compile each .cpp file individually
 $(CPP_OBJECTS): $(INCLUDES) %.o :%.cpp 
-	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(INCLUDE_FLAG) $(CFLAGS)
+	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(CFLAGS) $(INCLUDE_FLAG)
 
 #compile each .c file individually
 $(OBJECTS): $(INCLUDES) %.o :%.c
-	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(INCLUDE_FLAG) $(CFLAGS)
+	$(CC) -Os -DF_CPU=16000000UL -mmcu=$(TARGET_PLATFORM) -c $< -o $@ $(CFLAGS) $(INCLUDE_FLAG)
 
 clean:
 	-rm -rf build/* ../common/arduino/*.o compile_commands.json

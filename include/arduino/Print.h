@@ -75,7 +75,6 @@ public:
   size_t print(long, int = DEC);
   size_t print(unsigned long, int = DEC);
   size_t print(double, int = 2);
-  size_t print(uint64_t b, int base = 10);
   size_t print(const Printable &);
 
   size_t println(const __FlashStringHelper *);
