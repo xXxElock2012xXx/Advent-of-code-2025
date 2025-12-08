@@ -5,6 +5,8 @@
 #include "arduino/HardwareSerial.h"
 #include "stdint.h"
 
+extern HardwareSerial Serial;
+
 class Uint64 {
 public:
   // bytes[1] = msb bytes[0] = lsb
@@ -20,9 +22,10 @@ public:
 
   Uint64 &operator=(const Uint64 &other) = default;
 
-  Uint64 &operator=(const int &other) {
+  Uint64 &operator=(const int other) {
     bytes[0] = other;
     bytes[1] = 0;
+    return *this;
   };
 
   Uint64 &operator+=(const Uint64 &other) {
@@ -89,7 +92,7 @@ public:
   Uint64 &operator++() { return *this += 1; }
 
   void ReadUint64(const uint64_t *input_data) {
-    Serial.println ("Fuck uint64");
+    Serial.println("Fuck uint64");
     ReadVal(input_data, this->bytes);
   }
 

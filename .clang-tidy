@@ -39,6 +39,7 @@ Checks: >
   -misc-use-internal-linkage,
   -readability-identifier-naming,
   -modernize-redundant-void-arg,
+  -google-objc-global-variable-declaration,
 
 ExtraArgs:
   - "-std=c++23"

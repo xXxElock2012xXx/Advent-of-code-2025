@@ -44,7 +44,6 @@ void setup() {
   Uint64 result;
 
   Serial.print("fuck main");
-  Serial.print("fuck main");
   result.ReadUint64(&kIdRanges[0]);
   result.Print();
 }
