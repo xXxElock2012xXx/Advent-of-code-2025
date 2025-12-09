@@ -29,21 +29,34 @@ public:
   };
 
   Uint64 &operator+=(const Uint64 &other) {
-    uint32_t copy = bytes[0];
-
-    bytes[0] += other.bytes[0];
 
     bytes[1] += other.bytes[1] +
-                static_cast<uint32_t>(copy + other.bytes[0] < bytes[0]);
+                static_cast<uint32_t>(bytes[0] + other.bytes[0] < bytes[0]);
+
+    bytes[0] += other.bytes[0];
     return *this;
   }
 
-  Uint64 &operator+=(const int &other) {
-    uint32_t copy = bytes[0];
+  Uint64 &operator+=(const uint32_t &other) {
+    bytes[1] += static_cast<uint32_t>(bytes[0] + other < bytes[0]);
 
     bytes[0] += other;
+    return *this;
+  }
 
-    bytes[1] += static_cast<uint32_t>(copy + other < bytes[0]);
+  Uint64 &operator*=(uint32_t other) {
+    if (!other) {
+      return *this = 0;
+    }
+
+    const Uint64 copy = *this;
+    other -= 1;
+
+    while (other) {
+      *this = *this + copy;
+      other--;
+    }
+
     return *this;
   }
 
@@ -59,13 +72,23 @@ public:
     return retval;
   }
 
-  Uint64 operator+(const int &other) {
+  Uint64 operator+(const uint32_t &other) {
     Uint64 retval;
-
+    const uint32_t copy = retval.bytes[0];
     retval.bytes[0] = bytes[0] + other;
 
-    retval.bytes[1] =
-        bytes[1] + static_cast<uint32_t>(bytes[0] + other < bytes[0]);
+    retval.bytes[1] = bytes[1] + static_cast<uint32_t>(copy + other < bytes[0]);
+
+    return retval;
+  }
+
+  Uint64 operator*(uint32_t other) const {
+    Uint64 retval;
+
+    while (other) {
+      retval = retval + *this;
+      other--;
+    }
 
     return retval;
   }
@@ -91,8 +114,7 @@ public:
 
   Uint64 &operator++() { return *this += 1; }
 
-  void ReadUint64(const uint64_t *input_data) {
-    Serial.println("Fuck uint64");
+  template <typename type_t> void ReadUint64(const type_t *input_data) {
     ReadVal(input_data, this->bytes);
   }
 
